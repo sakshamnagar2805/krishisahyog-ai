@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {evaluatePilotReadiness,requiredMigrations} from '../server/ingestion/pilotReadiness.ts';
+const approved={id:'source1',access_policy:'PERMITTED',status:'ACTIVE',permission_reviewed_at:'2026-10-08',robots_reviewed_at:'2026-10-08',reviewed_by:'reviewer'};
+test('missing migrations block a pilot',()=>assert.ok(evaluatePilotReadiness({migrations:[],sources:[approved],secureEgress:true}).blockers.includes('MISSING_DATABASE_MIGRATIONS')));
+test('unverified network egress blocks a pilot',()=>assert.ok(evaluatePilotReadiness({migrations:requiredMigrations,sources:[approved],secureEgress:false}).blockers.includes('SECURE_EGRESS_UNVERIFIED')));
+test('no approved sources blocks a pilot',()=>assert.ok(evaluatePilotReadiness({migrations:requiredMigrations,sources:[],secureEgress:true}).blockers.includes('NO_APPROVED_SOURCES')));
+test('unreviewed sources cannot qualify',()=>assert.equal(evaluatePilotReadiness({migrations:requiredMigrations,sources:[{...approved,reviewed_by:null}],secureEgress:true}).approvedSourceCount,0));
+test('ready requires migrations, reviewed sources, secure egress',()=>assert.equal(evaluatePilotReadiness({migrations:requiredMigrations,sources:[approved],secureEgress:true}).ready,true));
+test('previously approved but suspended sources cannot qualify',()=>assert.equal(evaluatePilotReadiness({migrations:requiredMigrations,sources:[{...approved,status:'SUSPENDED'}],secureEgress:true}).ready,false));

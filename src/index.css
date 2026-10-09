@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+/*
+ * KrishiSahyog AI design tokens
+ * Brand: green + navy + white. Balance ~60% white/off-white, 25% navy, 12% green, 3% functional.
+ * Accessibility: white text sits on brand-dark (5:1), never on brand/success/warning.
+ */
+@theme {
+  --font-sans: 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Gurmukhi', system-ui, sans-serif;
+  --font-display: 'Anek Latin', 'Noto Sans Devanagari', 'Noto Sans Gurmukhi', system-ui, sans-serif;
+
+  --color-brand: #16a34a;
+  --color-brand-dark: #15803d;
+  --color-brand-light: #dcfce7;
+  --color-navy: #0f172a;
+  --color-navy-deep: #020617;
+  --color-blue-soft: #eff6ff;
+  --color-offwhite: #f8fafc;
+  --color-ink: #1e293b;
+  --color-muted: #64748b;
+  --color-line: #e2e8f0;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-brand-dark);
+    outline-offset: 2px;
+  }
+}
+
+/* One quiet entrance for page sections; delays are set per element with --rise-delay */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 360ms ease-out both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}

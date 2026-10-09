@@ -1,0 +1,170 @@
+[
+  {
+    "step": "01",
+    "name": "Dashboard renders original shell with SYNTHETIC/DEMO labelling",
+    "outcome": "PASS",
+    "detail": "Banner + illustrative-data note + header \"Synthetic farmer (demo)\""
+  },
+  {
+    "step": "02",
+    "name": "Header bell and sidebar show the same synthetic unread count",
+    "outcome": "PASS",
+    "detail": "sidebar unread badge=4"
+  },
+  {
+    "step": "03",
+    "name": "Profile: consistent synthetic ID / location / crop",
+    "outcome": "PASS",
+    "detail": "DEMO-FRM-1001, Jaipur, Rajasthan; \"Not connected to Aadhaar, land records…\""
+  },
+  {
+    "step": "04",
+    "name": "PMFBY: simulated claim visible with fictional-values disclosure",
+    "outcome": "PASS",
+    "detail": "Claim DEMO-CLM-2026-001 + \"fictional scenario values, not a PMFBY portal result\""
+  },
+  {
+    "step": "05",
+    "name": "PMFBY: claim documents view lists missing/expired documents",
+    "outcome": "PASS",
+    "detail": "Missing/expired documents shown on claim"
+  },
+  {
+    "step": "06",
+    "name": "Grievance: create claim-linked simulated grievance",
+    "outcome": "PASS",
+    "detail": "DEMO-GRV-1791506451729-1-39cba613 linked to DEMO-CLM-2026-001; \"not filed at CPGRAMS\" disclaimer shown"
+  },
+  {
+    "step": "07",
+    "name": "Grievance: simulate status transitions; timeline updated",
+    "outcome": "PASS",
+    "detail": "SUBMITTED → UNDER REVIEW → RESOLVED, each labelled \"Simulated\""
+  },
+  {
+    "step": "08",
+    "name": "PACS: save local enquiry and simulate transitions",
+    "outcome": "PASS",
+    "detail": "history count=2; DEMO_REQUEST_CREATED → INFORMATION_REQUIRED; no approval/disbursal wording"
+  },
+  {
+    "step": "09",
+    "name": "PACS: demo collection slip explicitly invalid",
+    "outcome": "PASS",
+    "detail": "Slip titled \"Demo collection slip — not valid at any PACS godown\""
+  },
+  {
+    "step": "10",
+    "name": "PACS: refresh keeps local history",
+    "outcome": "PASS",
+    "detail": "history still 2 after reload"
+  },
+  {
+    "step": "11",
+    "name": "Documents: preparation note does not mark missing doc verified",
+    "outcome": "PASS",
+    "detail": "\"Land Record (Jamabandi / Fard RoR) — MISSING\" stays MISSING after preparation note"
+  },
+  {
+    "step": "12",
+    "name": "Documents: invalid label rejected",
+    "outcome": "PASS",
+    "detail": "Error \"Enter a safe document label (3–120 characters).\""
+  },
+  {
+    "step": "13",
+    "name": "Notifications: new demo notifications present; toggle read/unread",
+    "outcome": "PASS",
+    "detail": "unread 10→9→10; header text: KrishiSahyog Farmer services assistant English Ask by voice 10 SF Synthetic farm"
+  },
+  {
+    "step": "14",
+    "name": "Notifications: mark all read persists after reload",
+    "outcome": "PASS",
+    "detail": "Unread 0 after reload"
+  },
+  {
+    "step": "15",
+    "name": "Government schemes: verified catalog empty-state + 12 research-only records",
+    "outcome": "PASS",
+    "detail": "Verified: \"No verified government records…\"; Research: 12 items, each \"RESEARCH ONLY\", no eligibility assessment"
+  },
+  {
+    "step": "16",
+    "name": "Government schemes: research detail shows caveats and https official links",
+    "outcome": "PASS",
+    "detail": "Links: https://pmfby.gov.in/, https://pmfby.gov.in/farmerApplicationForm"
+  },
+  {
+    "step": "17",
+    "name": "Research search: farmer need narrows matches",
+    "outcome": "PASS",
+    "detail": "3 matches; PM-KUSUM listed: true"
+  },
+  {
+    "step": "18",
+    "name": "AI assistant (EN): honest no-verified-sources state, no citations",
+    "outcome": "PASS",
+    "detail": "NO VERIFIED SOURCES AVAILABLE; no % or [n] in answer"
+  },
+  {
+    "step": "19",
+    "name": "AI assistant (HI language): Hindi refusal",
+    "outcome": "PASS",
+    "detail": "Language menu: [ਪੰਜਾਬੀ · Punjabi | हिन्दी · Hindi | English · Indian English | ગુજરાતી · Gujarati | తెలుగు · Telugu | தமிழ் · Tamil | বাংলা · Bengali | ಕನ್ನಡ · Kannada]; Hindi answer: इस प्रश्न के लिए अभी सत्यापित सरकारी स्रोत उपलब्ध नहीं हैं। कृपया आधिकारिक सरकारी पोर्टल देखें।"
+  },
+  {
+    "step": "20",
+    "name": "AI assistant: irrelevant/prompt-injection question still refused",
+    "outcome": "PASS",
+    "detail": "Refused; no eligibility/amount claimed"
+  },
+  {
+    "step": "21",
+    "name": "Browser back/forward does not crash the SPA",
+    "outcome": "PASS",
+    "detail": "No crash (note: tabs are in-memory state, not URL routes — Back leaves the app)"
+  },
+  {
+    "step": "22",
+    "name": "Reset demo: seed restored, created grievance removed",
+    "outcome": "PASS",
+    "detail": "grievance DEMO-GRV-1791506451729-1-39cba613 gone; localStorage keys after reset: []"
+  },
+  {
+    "step": "23",
+    "name": "Corrupted-but-valid-shaped state: demo boundary offers demo-only reset",
+    "outcome": "PASS",
+    "detail": "Render crash caught → \"Reset local synthetic demo and reload\" → seed restored; unrelated key kept"
+  },
+  {
+    "step": "24",
+    "name": "Keyboard: sidebar reachable and activatable by Tab + Enter",
+    "outcome": "PASS",
+    "detail": "Profile reached via Tab and opened with Enter; focus style: solid/none"
+  },
+  {
+    "step": "25",
+    "name": "Layout tablet 768x1024: no horizontal overflow; banner visible",
+    "outcome": "PASS",
+    "detail": "scrollWidth-clientWidth=0"
+  },
+  {
+    "step": "26",
+    "name": "Layout phone 390x844: no horizontal overflow; banner visible",
+    "outcome": "PASS",
+    "detail": "scrollWidth-clientWidth=0"
+  },
+  {
+    "step": "27",
+    "name": "Layout kiosk 1920x1080: no horizontal overflow; banner visible",
+    "outcome": "PASS",
+    "detail": "scrollWidth-clientWidth=0"
+  },
+  {
+    "step": "28",
+    "name": "No uncaught page errors during journey",
+    "outcome": "PASS",
+    "detail": "0 unexpected page errors; 2 expected render-error logs from the deliberate corruption in step 23 (Google Fonts DNS failures excluded: sandbox has no internet)"
+  }
+]

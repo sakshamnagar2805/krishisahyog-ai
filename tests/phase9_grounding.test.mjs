@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {validateQuestion,retrieveApproved,noSources,answerGrounded,createEvidencePrompt} from '../server/assistant/grounded.ts';
+const src={id:'s1',code:'S',title:'Irrigation Assistance',summary:'Verified irrigation policy description.',version:1,effectiveFrom:null,effectiveTo:null,verificationStatus:'VERIFIED',officialUrl:'https://gov.in/x',retrievedAt:'2026-10-01',evidence:{sourceUrl:'https://gov.in/x'}};
+const repo=(items)=>({listPublished:async(kind)=>({items:kind==='schemes'?items:[],total:kind==='schemes'?items.length:0})});
+test('rejects invalid questions and unsupported language',()=>{assert.throws(()=>validateQuestion('','en'));assert.throws(()=>validateQuestion('test','fr'))});
+test('no invented fallback when catalog empty',async()=>{let calls=0;const r=await answerGrounded(repo([]),'irrigation','en',async()=>{calls++;return 'invented'});assert.equal(r.status,'NO_VERIFIED_SOURCES');assert.equal(calls,0)});
+test('draft and missing source URL excluded',async()=>{const r=await retrieveApproved(repo([{...src,verificationStatus:'DRAFT'}, {...src,id:'other',evidence:{}}]),'irrigation');assert.equal(r.length,0)});
+test('source evidence passed to generator, citations checked',async()=>{const r=await answerGrounded(repo([src]),'irrigation','en',async(instr,prompt)=>{assert.match(instr,/ONLY/);assert.match(prompt,/Verified irrigation/);return 'Official record says irrigation assistance [1].'});assert.equal(r.status,'ANSWERED');assert.equal(r.sources.length,1);assert.equal(r.eligibility,'NOT_ASSESSED')});
+test('invalid model citation fails closed',async()=>{const r=await answerGrounded(repo([src]),'irrigation','en',async()=> 'Wrong [9]');assert.equal(r.status,'NO_VERIFIED_SOURCES')});
+test('unattributed model output fails closed',async()=>{const r=await answerGrounded(repo([src]),'irrigation','en',async()=> 'Unsupported');assert.equal(r.status,'NO_VERIFIED_SOURCES')});
+test('Hindi unavailable message exists',()=>assert.match(noSources('hi').answer,/स्रोत/));
+test('evidence prompt retains limited excerpt and verified URL',()=>{const p=createEvidencePrompt('x',[{id:'a',kind:'scheme',title:'Test',url:'https://gov.in',summary:'abc',version:1,retrievedAt:'now',effectiveFrom:null,effectiveTo:null}],'en');assert.equal(p.excerpts[0].url,'https://gov.in')});

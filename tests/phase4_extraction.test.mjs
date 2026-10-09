@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {extractDocument} from '../server/extraction/extract.ts';
+const run=(x,m='text/html')=>extractDocument(Buffer.from(x),m);
+test('HTML passages contain original text and offsets',()=>{const r=run('<h1>PM-KISAN Scheme</h1><p>Eligibility must be verified.</p>');assert.equal(r.state,'EXTRACTED');assert.ok(r.passages.find(p=>p.originalText.includes('Eligibility')));assert.ok(r.candidates.every(c=>r.passages[c.evidenceIndex].originalText.includes(c.value)));});
+test('Hindi is retained',()=>{const r=run('<p>किसान योजना पात्रता संबंधी जानकारी</p>');assert.equal(r.language,'hi');assert.equal(r.candidates[0].field,'eligibility');});
+test('no text returns NO_TEXT',()=>{const r=run('<html><script>secret</script></html>');assert.equal(r.state,'NO_TEXT');assert.equal(r.candidates.length,0);});
+test('broken PDF is rejected',()=>{const r=run('broken','application/pdf');assert.equal(r.state,'PARSER_ERROR');});
+test('no effective date is invented',()=>{const r=run('<p>Scheme is active in some locations</p>');assert.equal(r.candidates.some(c=>c.field==='effective_date'),false);});
+test('two benefit lines retain independent evidence',()=>{const r=run('<p>Subsidy amount as published</p><p>Benefit maximum as notified</p>');assert.equal(r.candidates.filter(c=>c.field==='benefit').length,2);});
+test('HTML table values retained as text evidence',()=>{const r=run('<table><tr><td>Eligibility</td><td>As specified</td></tr></table>');assert.ok(r.passages.some(p=>p.originalText.includes('Eligibility')));});
+test('document kind does not claim legal authority from unknown text',()=>{const r=run('<p>Unknown text without a publication marker</p>');assert.equal(r.kind,'UNKNOWN');});

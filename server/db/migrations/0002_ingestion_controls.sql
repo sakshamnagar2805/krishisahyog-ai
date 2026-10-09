@@ -1,0 +1,16 @@
+BEGIN;
+ALTER TABLE government_sources ADD COLUMN IF NOT EXISTS robots_reviewed_at TIMESTAMPTZ;
+ALTER TABLE government_sources ADD COLUMN IF NOT EXISTS reviewed_by TEXT;
+ALTER TABLE government_sources ADD COLUMN IF NOT EXISTS permission_reviewed_at TIMESTAMPTZ;
+ALTER TABLE government_sources ADD COLUMN IF NOT EXISTS request_interval_seconds INTEGER NOT NULL DEFAULT 3600 CHECK(request_interval_seconds>=60);
+ALTER TABLE government_sources ADD COLUMN IF NOT EXISTS max_bytes INTEGER NOT NULL DEFAULT 2097152 CHECK(max_bytes BETWEEN 1024 AND 10485760);
+ALTER TABLE government_sources ADD COLUMN IF NOT EXISTS next_check_at TIMESTAMPTZ;
+ALTER TABLE government_sources ADD COLUMN IF NOT EXISTS etag TEXT;
+ALTER TABLE government_sources ADD COLUMN IF NOT EXISTS last_modified TEXT;
+ALTER TABLE government_sources ADD COLUMN IF NOT EXISTS last_content_sha256 CHAR(64);
+ALTER TABLE government_sources ADD CONSTRAINT reviewed_source_only CHECK (access_policy<>'PERMITTED' OR (permission_reviewed_at IS NOT NULL AND reviewed_by IS NOT NULL AND robots_reviewed_at IS NOT NULL AND collection_method IN ('HTML','DOCUMENT','DATASET')));
+ALTER TABLE ingestion_runs ADD COLUMN IF NOT EXISTS bytes_received INTEGER;
+ALTER TABLE ingestion_runs ADD COLUMN IF NOT EXISTS content_sha256 CHAR(64);
+ALTER TABLE ingestion_runs ADD COLUMN IF NOT EXISTS result_type TEXT;
+CREATE INDEX IF NOT EXISTS government_sources_due ON government_sources(next_check_at) WHERE access_policy='PERMITTED';
+COMMIT;

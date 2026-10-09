@@ -1,0 +1,11 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {rankCandidates,validateDiscoveryQuery} from '../server/discovery/engine.ts';
+const base={id:'1',code:'SCHEME_A',title:'Solar Pump Assistance',summary:'Published solar energy support for irrigation.',officialUrl:'https://example.gov.in/scheme',verificationStatus:'VERIFIED',evidence:{sourceId:'official'},effectiveFrom:null,effectiveTo:null};
+test('matching crop/need is relevance, never certified eligibility',()=>{const r=rankCandidates([base],{need:'solar'});assert.equal(r.length,1);assert.equal(r[0].eligibility.status,'RULES_UNAVAILABLE');assert.ok(r[0].relevance.score>0)});
+test('draft content never appears',()=>assert.equal(rankCandidates([{...base,verificationStatus:'DRAFT'}],{}).length,0));
+test('queries without matching terms return no results',()=>assert.equal(rankCandidates([base],{need:'fishery'}).length,0));
+test('no filters lists verified approved items as discovery candidates',()=>assert.equal(rankCandidates([base],{}).length,1));
+test('district requires state',()=>assert.throws(()=>validateDiscoveryQuery({district:'Jaipur'}),/DISTRICT_REQUIRES_STATE/));
+test('invalid area rejected',()=>assert.throws(()=>validateDiscoveryQuery({landAreaHectares:-1}),/INVALID_LAND_AREA/));
+test('query control chars rejected',()=>assert.throws(()=>validateDiscoveryQuery({search:'bad\nquery'}),/INVALID_FILTER/));
+test('stable ranking favors title match',()=>{const a={...base,id:'a'};const b={...base,id:'b',title:'Agriculture Program',summary:'Solar equipment support'};assert.equal(rankCandidates([b,a],{search:'solar'})[0].id,'a')});

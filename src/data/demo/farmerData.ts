@@ -1,0 +1,53 @@
+import type { Farmer } from '../../types';
+
+export const demoFarmer: Farmer = {
+  isDemo: true,
+  id: 'DEMO-FRM-1001',
+  name: 'Ramesh Kumar',
+  fatherName: 'Late Sh. Ramchandra Kumar',
+  village: 'Kishanpura',
+  district: 'Jaipur',
+  state: 'Rajasthan',
+  pacsMembershipId: 'RJ-JPR-102-089',
+  pacsSocietyName: 'Kishanpura Central PACS #102',
+  totalLandAcres: 4.5,
+  primaryCrop: 'Wheat',
+  khasraPlots: [
+    {
+      khasraNo: '42//18',
+      khewatNo: '102',
+      khatoniNo: '145',
+      areaAcres: 2.5,
+      village: 'Kishanpura',
+      district: 'Jaipur',
+      cropSown: 'Wheat (HD-3086)',
+      sowingDate: '2025-11-04',
+      irrigationType: 'Canal & Tube Well Combined',
+    },
+    {
+      khasraNo: '42//19',
+      khewatNo: '102',
+      khatoniNo: '146',
+      areaAcres: 2.0,
+      village: 'Kishanpura',
+      district: 'Jaipur',
+      cropSown: 'Mustard (Pusa Bold)',
+      sowingDate: '2025-10-28',
+      irrigationType: 'Tube Well Solar Powered',
+    },
+  ],
+  aadhaarMasked: 'XXXXXXXX4019',
+  aadhaarSeeded: false, // Priority action required for DBT!
+  bankAccountMasked: 'Rajasthan Marudhara Gramin Bank (A/C ••••4109)',
+  bankName: 'Rajasthan Marudhara Gramin Bank, Amber Branch',
+  ifscMasked: 'RMGB0000102',
+  dbtActive: false, // Flagged pending NPCI resolution
+  kccLimit: 180000,
+  kccAvailableBalance: 42000,
+  activeClaimId: 'DEMO-CLM-2026-001',
+  activeGrievanceId: 'GRV-DEMO-2026-0001',
+  source: 'Revenue Land Record Authority (Jamabandi)',
+  authority: 'Department of Agriculture & Farmers Welfare',
+  lastVerified: '2025-11-12T14:30:00Z',
+  verificationStatus: 'ACTION_REQUIRED',
+};

@@ -1,0 +1,6 @@
+{
+  "name": "KrishiSahyog AI",
+  "description": "Unified rural agriculture, cooperative, and government services assistant for SIH 2026 Problem Statement 26088.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

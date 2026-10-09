@@ -1,0 +1,11 @@
+const fs=require('fs');const assert=require('assert');
+const read=f=>fs.readFileSync(f,'utf8');
+const app=read('src/App.tsx');const api=read('server/publicContentApi.ts');const prod=read('server/index.ts');const vite=read('vite.config.ts');
+assert(!/demoDataProvider|DEMO_FARMER|OtpVerificationPage|setCurrentRole|admin-governance/.test(app),'Public entry point contains demo identity or admin flow');
+assert(!/demoDataProvider|src\/data\/demo/.test(read('src/services/index.ts')),'Service facade imports demos');
+assert(!/createAssistantApi|demo answers only/.test(prod),'Production server enables ungrounded AI');
+assert(!/createAssistantApi|demo answers only/.test(vite),'Development server enables ungrounded AI');
+assert(/createPublicContentApi/.test(prod)&&/createPublicContentApi/.test(vite),'Missing shared public API registration');
+assert(/items: \[\], total: 0/.test(api),'Public catalogs must not contain static government data');
+assert(/401/.test(api)&&/AUTHENTICATION_REQUIRED/.test(api),'Private/admin API must refuse anonymous requests');
+console.log('PASS: 7 Phase 1 static regression checks');

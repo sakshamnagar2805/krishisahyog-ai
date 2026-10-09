@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+const read=p=>readFileSync(new URL(p,import.meta.url),'utf8');
+test('approved versions only, with approval metadata',()=>{const s=read('../server/publicContent/repository.ts');assert.match(s,/verification_status='APPROVED'/);assert.match(s,/approved_at IS NOT NULL/);assert.match(s,/approved_by IS NOT NULL/);});
+test('source access and document privacy are enforced',()=>{const s=read('../server/publicContent/repository.ts');assert.match(s,/access_policy='PERMITTED'/);assert.match(s,/access_status='PUBLIC'/);});
+test('search is parameterized and geography constrained',()=>{const s=read('../server/publicContent/repository.ts');assert.match(s,/ILIKE \$\$?\{/);assert.match(s,/geography_code=ANY/);});
+test('client rejects missing evidence and unverified content',()=>{const s=read('../src/services/public/governmentContentClient.ts');assert.match(s,/verificationStatus!=='VERIFIED'/);assert.match(s,/evidence\?\.sha256/);});
+test('existing layout and routes are kept',()=>{const s=read('../src/App.tsx');for(const x of ['<Header','<Sidebar','<Footer','government-schemes','farmer-policies','pmfby-crop-insurance'])assert.ok(s.includes(x),x);});
+test('no fixture fallback in active public application',()=>{const s=read('../src/App.tsx');assert.doesNotMatch(s,/demoDataProvider|src\/data\/demo/);});

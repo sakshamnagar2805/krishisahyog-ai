@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {checkReviewRequest} from '../server/review/workflow.ts';
+const id='123e4567-e89b-42d3-a456-426614174000';
+test('valid submission by editor',()=>assert.equal(checkReviewRequest('SCHEME_VERSION',id,'SUBMIT',{id:'editor',role:'EDITOR'}),'scheme_versions'));
+test('reviewer cannot submit',()=>assert.throws(()=>checkReviewRequest('SCHEME_VERSION',id,'SUBMIT',{id:'reviewer',role:'REVIEWER'}),/FORBIDDEN/));
+test('editor cannot approve',()=>assert.throws(()=>checkReviewRequest('POLICY_VERSION',id,'APPROVE',{id:'editor',role:'EDITOR'}),/FORBIDDEN/));
+test('reject requires explanation',()=>assert.throws(()=>checkReviewRequest('RULE_VERSION',id,'REJECT',{id:'reviewer',role:'REVIEWER'},'bad'),/REASON_REQUIRED/));
+test('reject with justification',()=>assert.equal(checkReviewRequest('RULE_VERSION',id,'REJECT',{id:'reviewer',role:'REVIEWER'},'Source is superseded'),'eligibility_rule_versions'));
+test('reject invalid content ID',()=>assert.throws(()=>checkReviewRequest('SCHEME_VERSION','oops','SUBMIT',{id:'editor',role:'EDITOR'}),/INVALID_CONTENT/));
+test('reject unknown content type',()=>assert.throws(()=>checkReviewRequest('FAKE',id,'SUBMIT',{id:'editor',role:'EDITOR'}),/INVALID_CONTENT/));
+test('withdraw restricted to admin',()=>assert.throws(()=>checkReviewRequest('POLICY_VERSION',id,'WITHDRAW',{id:'editor',role:'EDITOR'},'Source has been withdrawn'),/FORBIDDEN/));

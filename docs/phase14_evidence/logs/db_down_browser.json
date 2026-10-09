@@ -1,0 +1,7 @@
+{
+ "dashboardStillDemo": true,
+ "catalogError": "The schemes service is unavailable (HTTP 503).. No demo fallback is permitted.",
+ "researchError": "Research staging is unavailable. Confirm migration 0006 and database connection.",
+ "assistant": "VERIFIED_ASSISTANCE_UNAVAILABLE. Check the backend, approved catalog and Gemini configuration.",
+ "pageErrors": []
+}

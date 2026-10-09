@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const src=readFileSync('server/knowledge/normalize.ts','utf8');
+const migration=readFileSync('server/db/migrations/0004_knowledge_model.sql','utf8');
+const repo=readFileSync('server/knowledge/repository.ts','utf8');
+test('taxonomy covers farmer programme classes',()=>{for(const key of ['INCOME','INSURANCE','SOLAR','IRRIGATION','MARKETS','MSP_PROCUREMENT','CREDIT','SOIL_HEALTH','HORTICULTURE','INPUTS','MECHANIZATION','FPO_COOPERATIVES','NATURAL_ORGANIC','LIVESTOCK_DAIRY','FISHERIES','SOIL_WATER','STATE_SUBSIDIES'])assert.ok(migration.includes(`'${key}'`),key)});
+test('policy taxonomy distinguishes sources',()=>{for(const key of ['ACT','RULE','SCHEME_GUIDELINE','OPERATIONAL_GUIDELINE','GAZETTE_NOTIFICATION','GOVERNMENT_ORDER','CIRCULAR','AMENDMENT','ADVISORY','PROCUREMENT_NOTICE','PRESS_RELEASE'])assert.ok(migration.includes(`'${key}'`),key)});
+test('aliases do not auto-approve ambiguous interpretations',()=>{assert.match(src,/'pm ksy':\{state:'AMBIGUOUS'/);assert.match(src,/'pm assh':\{state:'AMBIGUOUS'/)});
+test('public knowledge queries require approved versions and permitted sources',()=>{assert.equal((repo.match(/verification_status='APPROVED'/g)||[]).length,3);assert.equal((repo.match(/g.access_policy='PERMITTED'/g)||[]).length,3)});
+test('geography and date bounded version resolution',()=>{assert.match(repo,/if\(!geographyAncestry.length\)return null/);assert.match(repo,/geo.geography_code=ANY/);assert.match(repo,/v.effective_from<=\$3::date/);});
+test('no scheme or policy records seeded',()=>{assert.doesNotMatch(migration,/INSERT INTO (schemes|policies|scheme_versions|policy_versions)\s*\(/i)});
+test('separate first-class policy and scheme geography',()=>{assert.match(migration,/scheme_version_geographies/);assert.match(migration,/policy_version_geographies/)});

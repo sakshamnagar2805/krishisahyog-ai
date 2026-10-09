@@ -1,0 +1,55 @@
+import type { PACSServiceRequest } from '../../types';
+
+export const demoPACSRequests: PACSServiceRequest[] = [
+  {
+    isDemo: true,
+    id: 'DEMO-PACS-REQ-2026-001',
+    serviceId: 'DEMO-PACS-SVC-003',
+    serviceName: 'Cooperative Credit Assistance',
+    farmerId: 'DEMO-FRM-1001',
+    farmerName: 'Ramesh Kumar',
+    category: 'CREDIT ASSISTANCE',
+    subject: 'Inquiry regarding KCC renewal documents & interest subvention guidance',
+    description: 'Farmer requested guidance on the document checklist required for Kisan Credit Card annual review and interest subvention verification.',
+    status: 'INFORMATION_REQUIRED',
+    createdAt: '2025-11-10T10:30:00Z',
+    updatedAt: '2025-11-12T14:15:00Z',
+    requiredDocuments: [
+      'Aadhaar Identity Card',
+      'Bank Account Proof (Passbook & Mandate)',
+      'Land Record (Jamabandi / Fard RoR)',
+    ],
+    relatedDocumentIds: ['DOC-AADHAAR-01', 'DOC-BANK-02', 'DOC-LAND-01'],
+    actionRequired: 'Review required documents (Land Record is missing)',
+    timeline: [
+      {
+        date: '10 Nov 2025',
+        status: 'DEMO_REQUEST_CREATED',
+        title: 'Demo Request Created',
+        description: 'Demo request created locally within KrishiSahyog AI prototype.',
+        actor: 'Farmer Self-Service Desk',
+        isDemoEvent: true,
+      },
+      {
+        date: '11 Nov 2025',
+        status: 'DEMO_REQUEST_CREATED',
+        title: 'Information Reviewed',
+        description: 'Information reviewed (Demo system event). Preliminary intake assessed against citizen locker.',
+        actor: 'PACS Automated Guidance Engine',
+        isDemoEvent: true,
+      },
+      {
+        date: '12 Nov 2025',
+        status: 'INFORMATION_REQUIRED',
+        title: 'Information Required',
+        description: 'Information Required — Demo record indicates Land Record (Jamabandi / Fard RoR) is missing from citizen locker. Additional information/document may be required.',
+        actor: 'PACS Cooperative Desk System',
+        isDemoEvent: true,
+      },
+    ],
+    source: 'KrishiSahyog AI PACS Operations Module',
+    authority: 'Demo Primary Agricultural Cooperative Society',
+    lastVerified: '2025-11-12T14:15:00Z',
+    verificationStatus: 'DEMO',
+  },
+];
